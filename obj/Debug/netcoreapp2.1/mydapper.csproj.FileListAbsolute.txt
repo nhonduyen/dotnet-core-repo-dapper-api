@@ -1,0 +1,14 @@
+E:\dotnet\mydapper\bin\Debug\netcoreapp2.1\mydapper.deps.json
+E:\dotnet\mydapper\bin\Debug\netcoreapp2.1\mydapper.runtimeconfig.json
+E:\dotnet\mydapper\bin\Debug\netcoreapp2.1\mydapper.runtimeconfig.dev.json
+E:\dotnet\mydapper\bin\Debug\netcoreapp2.1\mydapper.dll
+E:\dotnet\mydapper\bin\Debug\netcoreapp2.1\mydapper.pdb
+E:\dotnet\mydapper\obj\Debug\netcoreapp2.1\mydapper.csprojAssemblyReference.cache
+E:\dotnet\mydapper\obj\Debug\netcoreapp2.1\mydapper.csproj.CoreCompileInputs.cache
+E:\dotnet\mydapper\obj\Debug\netcoreapp2.1\mydapper.RazorAssemblyInfo.cache
+E:\dotnet\mydapper\obj\Debug\netcoreapp2.1\mydapper.RazorAssemblyInfo.cs
+E:\dotnet\mydapper\obj\Debug\netcoreapp2.1\mydapper.AssemblyInfoInputs.cache
+E:\dotnet\mydapper\obj\Debug\netcoreapp2.1\mydapper.AssemblyInfo.cs
+E:\dotnet\mydapper\obj\Debug\netcoreapp2.1\mydapper.RazorTargetAssemblyInfo.cache
+E:\dotnet\mydapper\obj\Debug\netcoreapp2.1\mydapper.dll
+E:\dotnet\mydapper\obj\Debug\netcoreapp2.1\mydapper.pdb

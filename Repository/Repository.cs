@@ -8,12 +8,14 @@ using System.Collections.Generic;
 using System;
 using System.Linq.Expressions;
 using Dapper;
+using mydapper;
 
 namespace mydapper.Repository
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        protected readonly string _tableName;
+        protected string _tableName { get; set; }
+        public IOptions<SiteConfig> _config { get; set; }
         private readonly string connectionString = "Server=.\\SQLEXPRESS;Database=MBO;Trusted_Connection=True;";
         internal IDbConnection Connection
         {

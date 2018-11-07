@@ -14,7 +14,7 @@ namespace mydapper.Repository
             List<string> columns = new List<string>();
             foreach (var name in properties.Name)
             {
-                if (name != "ID")
+                if (!string.Equals(name, "id", StringComparison.OrdinalIgnoreCase))
                 {
                     columns.Add(name);
                 }
@@ -31,7 +31,7 @@ namespace mydapper.Repository
             List<string> parameter = new List<string>();
             foreach (var name in properties.Name)
             {
-                if (name != "ID")
+                if (!string.Equals(name, "id", StringComparison.OrdinalIgnoreCase))
                 {
                     parameter.Add(name + "=@" + name);
                 }
@@ -39,6 +39,6 @@ namespace mydapper.Repository
             return string.Format(@"UPDATE {0} SET {1} WHERE ID=@ID",
             tableName, string.Join(",", parameter));
         }
-      
+
     }
 }

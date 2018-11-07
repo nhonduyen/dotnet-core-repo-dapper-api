@@ -11,10 +11,10 @@ namespace mydapper.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private EmployeeRepository em;
-        public UserController()
+        private readonly IEmployeeRepository em;
+        public UserController(IEmployeeRepository emp)
         {
-            em = new EmployeeRepository();
+            em = emp;
         }
         // GET api/values
         [HttpGet]

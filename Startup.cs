@@ -16,25 +16,26 @@ namespace mydapper
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public static string ConnectionString { get; private set; }
+        public IConfigurationRoot Configuration { get; set; }
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            Configuration = new ConfigurationBuilder()
+            .SetBasePath(env.ContentRootPath)
+            .AddJsonFile("appSettings.json")
+            .Build();
         }
-
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<SiteConfig>(Configuration.GetSection("Site"));
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
-            services.AddSingleton<IConfiguration>(Configuration);
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            ConnectionString = Configuration["ConnectionStrings:ConnectionString1"];
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -16,9 +16,8 @@ namespace mydapper.Repository
         }
         public static async Task<int> Update<T>(this IDbConnection cnn, string tableName, dynamic items)
         {
-            var result = await SqlMapper.ExecuteAsync(cnn, DynamicQuery.GetUpdateQuery(tableName, items),
+            return await SqlMapper.ExecuteAsync(cnn, DynamicQuery.GetUpdateQuery(tableName, items),
              items);
-            return result;
         }
     }
 }

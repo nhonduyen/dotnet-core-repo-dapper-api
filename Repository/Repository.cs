@@ -15,8 +15,7 @@ namespace mydapper.Repository
     public class Repository<T> : IRepository<T> where T : class
     {
         protected string _tableName { get; set; }
-        public IOptions<SiteConfig> _config { get; set; }
-        private readonly string connectionString = "Server=.\\SQLEXPRESS;Database=MBO;Trusted_Connection=True;";
+        private readonly string connectionString = Startup.ConnectionString;
         internal IDbConnection Connection
         {
             get
@@ -40,8 +39,7 @@ namespace mydapper.Repository
             using (IDbConnection cn = this.Connection)
             {
                 var parameters = (object)this.Mapping(item);
-                var id = await cn.Insert<int>(this._tableName, parameters);
-                return id;
+                return await cn.Insert<int>(this._tableName, parameters);
             }
         }
         public virtual async Task<int> Remove(int ID)
@@ -49,8 +47,7 @@ namespace mydapper.Repository
             using (IDbConnection cn = this.Connection)
             {
                 var sql = string.Format("DELETE FROM {0} WHERE ID=@ID", this._tableName);
-                var result = await cn.ExecuteAsync(sql, ID);
-                return result;
+                return await cn.ExecuteAsync(sql, ID).ConfigureAwait(false);
             }
         }
         public virtual async Task RemoveAll()
@@ -58,7 +55,7 @@ namespace mydapper.Repository
             using (IDbConnection cn = this.Connection)
             {
                 var sql = string.Format("TRUNCATE TABLE {0};", this._tableName);
-                await cn.ExecuteAsync(sql);
+                await cn.ExecuteAsync(sql).ConfigureAwait(false);
             }
         }
         public virtual async Task<int> Update(T item)
@@ -66,8 +63,7 @@ namespace mydapper.Repository
             using (IDbConnection cn = this.Connection)
             {
                 var parameters = (object)this.Mapping(item);
-                var result = await cn.Update<int>(this._tableName, parameters);
-                return result;
+                return await cn.Update<int>(this._tableName, parameters);
             }
         }
         public virtual async Task<T> FindById(int id, string columns = "*")
@@ -75,8 +71,7 @@ namespace mydapper.Repository
             using (IDbConnection cn = this.Connection)
             {
                 var sql = string.Format("SELECT {0} FROM {1} WHERE ID=@ID;", columns, this._tableName);
-                var result = await cn.QueryFirstOrDefaultAsync<T>(sql, new { ID = id });
-                return result;
+                return await cn.QueryFirstOrDefaultAsync<T>(sql, new { ID = id }).ConfigureAwait(false);
             }
         }
         public virtual async Task<IEnumerable<T>> Find(string condition, object param = null, string columns = "*")
@@ -84,20 +79,16 @@ namespace mydapper.Repository
             using (IDbConnection cn = this.Connection)
             {
                 var sql = string.Format("SELECT {0} FROM {1} WHERE {2};", columns, this._tableName, condition);
-                var result = await cn.QueryAsync<T>(sql, param);
-                return result;
+                return await cn.QueryAsync<T>(sql, param).ConfigureAwait(false);
             }
         }
         public async Task<IEnumerable<T>> FindAll(string columns = "*")
         {
-            IEnumerable<T> items = null;
-
             var sql = string.Format(@"SELECT {0} FROM {1};", columns, this._tableName);
             using (IDbConnection cn = this.Connection)
             {
-                items = await cn.QueryAsync<T>(sql);
+                return await cn.QueryAsync<T>(sql).ConfigureAwait(false);
             }
-            return items;
         }
     }
 }

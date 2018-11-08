@@ -11,41 +11,41 @@ namespace mydapper.Controllers
     [Route("api/[controller]")]
     public class UserController : ControllerBase
     {
-        private readonly IEmployeeRepository em;
-        public UserController(IEmployeeRepository emp)
+        private readonly IEmployeeRepository _employeeRepository;
+        public UserController(IEmployeeRepository _employeeRepository)
         {
-            em = emp;
+            this._employeeRepository = _employeeRepository;
         }
         // GET api/values
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var result = await em.FindAll();
-            return new OkObjectResult(result);
+            var employees = await _employeeRepository.FindAll();
+            return new OkObjectResult(employees);
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var result = await em.FindEmpById(id);
-            if (result == null)
+            var employee = await _employeeRepository.FindEmpById(id);
+            if (employee == null)
             {
                 return NotFound();
             }
-            return new OkObjectResult(result);
+            return new OkObjectResult(employee);
         }
 
         [HttpGet]
         [Route("GetByName/{name}")] //[Route("get1/{param1}")] //   /api/example/get1/1?param2=4
         public async Task<IActionResult> GetByName(string name)
         {
-            var result = await em.Find("name like '%'+@NAME+'%'", new {NAME=name});
-            if (result == null)
+            var employees = await _employeeRepository.Find("name like N'%'+@NAME+'%'", new {NAME=name});
+            if (employees == null)
             {
                 return NotFound();
             }
-            return new OkObjectResult(result);
+            return new OkObjectResult(employees);
         }
         // POST api/values
         [HttpPost]

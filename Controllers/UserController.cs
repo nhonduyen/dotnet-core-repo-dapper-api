@@ -20,7 +20,9 @@ namespace mydapper.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var employees = await _employeeRepository.FindAll();
+            var employees = await _employeeRepository
+            .FindAll()
+            .ConfigureAwait(false);
             return new OkObjectResult(employees);
         }
 
@@ -28,7 +30,10 @@ namespace mydapper.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var employee = await _employeeRepository.FindById(id, customIdColumn: "EMP_ID");
+            var employee = await _employeeRepository
+            .FindById(id, customIdColumn: "EMP_ID")
+            .ConfigureAwait(false);
+            // same variable, no need to worry about context
             if (employee == null)
             {
                 return NotFound();
@@ -40,7 +45,9 @@ namespace mydapper.Controllers
         [Route("GetByName/{name}")] //[Route("get1/{param1}")] //   /api/example/get1/1?param2=4
         public async Task<IActionResult> GetByName(string name)
         {
-            var employees = await _employeeRepository.Find("NAME LIKE N'%'+@NAME+'%'", new { NAME = name });
+            var employees = await _employeeRepository.
+            Find("NAME LIKE N'%'+@NAME+'%'", new { NAME = name })
+            .ConfigureAwait(false);
             if (employees == null)
             {
                 return NotFound();
@@ -51,7 +58,7 @@ namespace mydapper.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Employee employee)
         {
-            var result = await _employeeRepository.Add(employee);
+            var result = await _employeeRepository.Add(employee).ConfigureAwait(false);
             return new OkObjectResult(result);
         }
 
@@ -59,7 +66,7 @@ namespace mydapper.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Employee employee)
         {
-            var result = await _employeeRepository.Update(employee, "EMP_ID");
+            var result = await _employeeRepository.Update(employee, "EMP_ID").ConfigureAwait(false);
             return new OkObjectResult(result);
         }
 
@@ -67,7 +74,7 @@ namespace mydapper.Controllers
         [HttpPatch]
         public async Task<IActionResult> Patch([FromBody] Employee employee)
         {
-            var result = await _employeeRepository.Update(employee, "EMP_ID");
+            var result = await _employeeRepository.Update(employee, "EMP_ID").ConfigureAwait(false);
             return new OkObjectResult(result);
         }
 
@@ -75,7 +82,7 @@ namespace mydapper.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var result = await _employeeRepository.Remove(id, "EMP_ID");
+            var result = await _employeeRepository.Remove(id, "EMP_ID").ConfigureAwait(false);
             return new OkObjectResult(result);
         }
     }

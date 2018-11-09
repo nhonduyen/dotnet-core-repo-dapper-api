@@ -28,7 +28,7 @@ namespace mydapper.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var employee = await _employeeRepository.FindEmpById(id);
+            var employee = await _employeeRepository.FindById(id, customIdColumn: "EMP_ID");
             if (employee == null)
             {
                 return NotFound();
@@ -40,7 +40,7 @@ namespace mydapper.Controllers
         [Route("GetByName/{name}")] //[Route("get1/{param1}")] //   /api/example/get1/1?param2=4
         public async Task<IActionResult> GetByName(string name)
         {
-            var employees = await _employeeRepository.Find("name like N'%'+@NAME+'%'", new {NAME=name});
+            var employees = await _employeeRepository.Find("NAME LIKE N'%'+@NAME+'%'", new { NAME = name });
             if (employees == null)
             {
                 return NotFound();
@@ -49,20 +49,34 @@ namespace mydapper.Controllers
         }
         // POST api/values
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Employee employee)
         {
+            var result = await _employeeRepository.Add(employee);
+            return new OkObjectResult(result);
         }
 
         // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody] Employee employee)
         {
+            var result = await _employeeRepository.Update(employee, "EMP_ID");
+            return new OkObjectResult(result);
+        }
+
+        // PATCH api/values/5
+        [HttpPatch]
+        public async Task<IActionResult> Patch([FromBody] Employee employee)
+        {
+            var result = await _employeeRepository.Update(employee, "EMP_ID");
+            return new OkObjectResult(result);
         }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(string id)
         {
+            var result = await _employeeRepository.Remove(id, "EMP_ID");
+            return new OkObjectResult(result);
         }
     }
 }

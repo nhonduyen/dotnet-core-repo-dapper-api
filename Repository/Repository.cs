@@ -39,15 +39,15 @@ namespace mydapper.Repository
             using (IDbConnection cn = this.Connection)
             {
                 var parameters = (object)this.Mapping(item);
-                return await cn.Insert<int>(this._tableName, parameters);
+                return await cn.Insert<int>(this._tableName, item);
             }
         }
-        public virtual async Task<int> Remove(int ID)
+        public virtual async Task<int> Remove(object id, string customIdColumn = "ID")
         {
             using (IDbConnection cn = this.Connection)
             {
-                var sql = string.Format("DELETE FROM {0} WHERE ID=@ID", this._tableName);
-                return await cn.ExecuteAsync(sql, ID).ConfigureAwait(false);
+                var sql = string.Format("DELETE FROM {0} WHERE {1}=@ID;", this._tableName, customIdColumn, customIdColumn);
+                return await cn.ExecuteAsync(sql, new { ID = id }).ConfigureAwait(false);
             }
         }
         public virtual async Task RemoveAll()
@@ -58,19 +58,19 @@ namespace mydapper.Repository
                 await cn.ExecuteAsync(sql).ConfigureAwait(false);
             }
         }
-        public virtual async Task<int> Update(T item)
+        public virtual async Task<int> Update(T item, string customIdColumn = "ID")
         {
             using (IDbConnection cn = this.Connection)
             {
                 var parameters = (object)this.Mapping(item);
-                return await cn.Update<int>(this._tableName, parameters);
+                return await cn.Update<int>(this._tableName, parameters, customIdColumn);
             }
         }
-        public virtual async Task<T> FindById(int id, string columns = "*")
+        public virtual async Task<T> FindById(object id, string columns = "*", string customIdColumn = "ID")
         {
             using (IDbConnection cn = this.Connection)
             {
-                var sql = string.Format("SELECT {0} FROM {1} WHERE ID=@ID;", columns, this._tableName);
+                var sql = string.Format("SELECT {0} FROM {1} WHERE {2}=@ID;", columns, this._tableName, customIdColumn);
                 return await cn.QueryFirstOrDefaultAsync<T>(sql, new { ID = id }).ConfigureAwait(false);
             }
         }
